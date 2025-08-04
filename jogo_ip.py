@@ -22,7 +22,7 @@ for caminho in caminhos_fundos:
 # Carregar sprite da parte de baixo
 sprite_baixo = pygame.image.load("Sprite-0001.png")
 # Redimensionar o sprite para um tamanho adequado (ajuste conforme necessário)
-sprite_baixo = pygame.transform.scale(sprite_baixo, (largura, 300))
+sprite_baixo = pygame.transform.scale(sprite_baixo, (largura, 400))
 # Posição do sprite na parte de baixo da tela (centralizado horizontalmente)
 sprite_x = (largura - sprite_baixo.get_width()) // 2
 sprite_y = altura - sprite_baixo.get_height() - 20  # 20 pixels de margem do fundo
@@ -95,12 +95,18 @@ while True:
             # print(f"Valor de do ultimo x foi {ultimo_x}")
             indice_cenario += 1
             jogador_x = largura - jogador_tamanho  # Reposiciona do lado direito
+            # Reposicionar inimigo no meio da tela
+            inimigo_x = largura // 2 - inimigo_tamanho // 2
+            inimigo_y = altura // 2 - inimigo_tamanho // 2
 
     elif ultimo_x > 1030: # Jogador volta ao cenário anterior
         indice_cenario -= 1
         # print(f"Valor de do ultimo x foi {ultimo_x}")
         jogador_x = 10 # Reposiciona do lado esquerdo
         ultimo_x = 0
+        # Reposicionar inimigo no meio da tela
+        inimigo_x = largura // 2 - inimigo_tamanho // 2
+        inimigo_y = altura // 2 - inimigo_tamanho // 2
     else:
         ultimo_x = jogador_x
 
