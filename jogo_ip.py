@@ -15,7 +15,7 @@ tela = pygame.display.set_mode((largura, altura))
 pygame.display.set_caption("Game UFPE_Alagada")
 
 # Cenarios
-caminhos_fundos = ["entrada_ufpe_2.png", "biblio.jpg", "ru.jpg"]
+caminhos_fundos = ["entrada_ufpe_2.png", "bib_central.png", "ru.jpg"]
 cenarios = []
 for caminho in caminhos_fundos:
     imagem = pygame.image.load(caminho)
@@ -30,7 +30,7 @@ indice_cenario = 0  # Começa no primeiro cenário
 
 # Jogador
 jogador_tamanho = 50
-jogador_x = 980
+jogador_x = largura - 200
 jogador_y = altura
 velocidade = 10
 
