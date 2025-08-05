@@ -12,7 +12,7 @@ altura = info.current_h
 
 # Tamanho da tela
 tela = pygame.display.set_mode((largura, altura))
-pygame.display.set_caption("Mudança de cenário")
+pygame.display.set_caption("Game UFPE_Alagada")
 
 # Cenarios
 caminhos_fundos = ["entrada_ufpe_2.png", "biblio.jpg", "ru.jpg"]
@@ -27,9 +27,6 @@ personagem_img = pygame.image.load("kakashi.png")
 personagem_img = pygame.transform.scale(personagem_img, (altura / 10, largura/10))
 
 indice_cenario = 0  # Começa no primeiro cenário
-
-# Cor do jogador
-cor_jogador = (200, 50, 50)
 
 # Jogador
 jogador_tamanho = 50
