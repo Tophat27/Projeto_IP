@@ -1,5 +1,6 @@
 import pygame
 import sys
+import random
 
 ultimo_x = 0
 
@@ -34,6 +35,31 @@ fonte_media = pygame.font.SysFont("Arial", 50)
 branco = (255, 255, 255)
 cinza = (150, 150, 150)
 azul_claro = (100, 200, 255)
+
+# Criar lista de gotas
+num_gotas = 200
+chuva = []
+for _ in range(num_gotas):
+    x = random.randint(0, largura)
+    y = random.randint(0, altura)
+    comprimento = random.randint(5, 15)
+    velocidade = random.randint(4, 10)
+    chuva.append([x, y, comprimento, velocidade])
+
+
+def desenhar_chuva():
+
+    # Atualiza e desenha as gotas
+    for gota in chuva:
+        x, y, comp, vel = gota
+        pygame.draw.line(tela, (138, 138, 255), (x, y), (x, y + comp), 1)
+        gota[1] += vel
+
+            # Se a gota sair da tela, reinicia no topo
+        if gota[1] > altura:
+            gota[0] = random.randint(0, largura)
+            gota[1] = random.randint(-20, -5)
+            gota[3] = random.randint(4, 10)
 
 
 def desenhar_botao(img_buttom, x, y, acao=None):
@@ -157,8 +183,12 @@ def iniciar_jogo():
         if jogador_y > altura - 280:
             jogador_y = altura - 280
 
-        tela.blit(cenarios[indice_cenario], (0, 0))
-        tela.blit(personagem_img, (jogador_x, jogador_y))
+        tela.blit(cenarios[indice_cenario], (0, 0))         #Desenha cenario    
+        tela.blit(personagem_img, (jogador_x, jogador_y))   #Desenha personagem
+        
+        # Atualiza e desenha as gotas
+        desenhar_chuva()
+        
         pygame.display.flip()
         clock.tick(fps)
 
@@ -171,6 +201,9 @@ def menu_principal():
         desenhar_botao(jogar_buttom, largura // 2 - 150, altura // 2 - 100, iniciar_jogo)
         desenhar_botao(creditos_buttom, largura // 2 - 150, altura // 2 + 0, mostrar_creditos)
         desenhar_botao(sair_buttom, largura // 2 - 150, altura // 2 + 100, pygame.quit)
+
+        # Atualiza e desenha as gotas
+        desenhar_chuva()
 
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
