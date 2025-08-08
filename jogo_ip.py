@@ -89,8 +89,12 @@ def iniciar_jogo():
         cenarios.append(imagem)
 
     #Carregando personagem
-    personagem_img = pygame.image.load("images/kakashi.png")
-    personagem_img = pygame.transform.scale(personagem_img, (largura / 16, altura / 8))
+    personagem_original = pygame.image.load("images/kakashi.png")
+    personagem_original = pygame.transform.scale(personagem_original, (largura // 16, altura // 8))
+    personagem_espelhado = pygame.transform.flip(personagem_original, True, False)
+
+    personagem_img = personagem_original  # Começa olhando para a esquerda
+    olhando_direita = False
 
     indice_cenario = 0  # Começa no primeiro cenário
 
@@ -115,8 +119,14 @@ def iniciar_jogo():
         teclas = pygame.key.get_pressed()
         if teclas[pygame.K_LEFT]:
             jogador_x -= velocidade
+            if olhando_direita == True:
+                personagem_img = personagem_original
+                olhando_direita = False
         if teclas[pygame.K_RIGHT]:
             jogador_x += velocidade
+            if olhando_direita == False:
+                personagem_img = personagem_espelhado
+                olhando_direita = True
         if teclas[pygame.K_UP]:
             jogador_y -= velocidade
         if teclas[pygame.K_DOWN]:
