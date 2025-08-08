@@ -29,6 +29,10 @@ creditos_buttom = pygame.transform.scale(creditos_buttom, (largura // 7, altura 
 sair_buttom = pygame.image.load("images/sair_buttom.png")
 sair_buttom = pygame.transform.scale(sair_buttom, (largura // 7, altura // 7))
 
+# Carregando slot de inventario
+slot_img = pygame.image.load("images/slot_inventario.png")
+slot_img = pygame.transform.scale(slot_img, (largura // 10, altura // 10))
+
 # Fontes e cores
 fonte_grande = pygame.font.SysFont("Arial", 70)
 fonte_media = pygame.font.SysFont("Arial", 50)
@@ -186,7 +190,15 @@ def iniciar_jogo():
         tela.blit(cenarios[indice_cenario], (0, 0))         #Desenha cenario    
         tela.blit(personagem_img, (jogador_x, jogador_y))   #Desenha personagem
         
-        # Atualiza e desenha as gotas
+        # Posição base (canto inferior esquerdo)
+        pos_x = 20
+        pos_y = altura - 64 - 20  # 20px de margem inferior
+
+        # Desenha 3 slots lado a lado
+        for i in range(3):
+            tela.blit(slot_img, (pos_x + i * (128 + 10), altura - 100))
+        
+        # Atualiza e desenha as gotas de chuva
         desenhar_chuva()
         
         pygame.display.flip()
