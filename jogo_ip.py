@@ -15,17 +15,17 @@ tela = pygame.display.set_mode((largura, altura))
 pygame.display.set_caption("Game UFPE_Alagada")
 
 # Tela de início (imagem)
-imagem_tela_inicio = pygame.image.load("tela_inicial.png")
+imagem_tela_inicio = pygame.image.load("images/tela_inicial.png")
 imagem_tela_inicio = pygame.transform.scale(imagem_tela_inicio, (largura, altura))
 
 # Carregando botões
-jogar_buttom = pygame.image.load("jogar_buttom.png")
+jogar_buttom = pygame.image.load("images/jogar_buttom.png")
 jogar_buttom = pygame.transform.scale(jogar_buttom, (largura // 7, altura // 7))
 
-creditos_buttom = pygame.image.load("creditos_buttom.png")
+creditos_buttom = pygame.image.load("images/creditos_buttom.png")
 creditos_buttom = pygame.transform.scale(creditos_buttom, (largura // 7, altura // 7))
 
-sair_buttom = pygame.image.load("sair_buttom.png")
+sair_buttom = pygame.image.load("images/sair_buttom.png")
 sair_buttom = pygame.transform.scale(sair_buttom, (largura // 7, altura // 7))
 
 # Fontes e cores
@@ -81,7 +81,7 @@ def mostrar_creditos():
 def iniciar_jogo():
 
     # Cenarios
-    caminhos_fundos = ["entrada_ufpe_2.png", "bib_central.png", "ru.png"]
+    caminhos_fundos = ["images/entrada_ufpe.png", "images/bib_central.png", "images/ru.png", "images/CIn.png"]
     cenarios = []
     for caminho in caminhos_fundos:
         imagem = pygame.image.load(caminho)
@@ -89,8 +89,8 @@ def iniciar_jogo():
         cenarios.append(imagem)
 
     #Carregando personagem
-    personagem_img = pygame.image.load("kakashi.png")
-    personagem_img = pygame.transform.scale(personagem_img, (largura / 10, altura/10))
+    personagem_img = pygame.image.load("images/kakashi.png")
+    personagem_img = pygame.transform.scale(personagem_img, (largura / 16, altura / 8))
 
     indice_cenario = 0  # Começa no primeiro cenário
 
