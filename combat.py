@@ -23,12 +23,13 @@ class CombatSystem:
         self.error_message = None
         self.error_start_time = 0
         self.error_duration = 1000  # 1 segundo em milissegundos
+        self.used_item_this_round = False  # Rastrear uso de item no turno
         # Carregar imagens maiores para combate
         self.player_img = pygame.transform.scale(player.image, (largura // 8, altura // 4))
         self.enemy_img = pygame.transform.scale(enemy.image, (largura // 8, altura // 4))
         # Carregar fundo principal
         try:
-            self.background = pygame.image.load(f"images/{background}.png")
+            self.background = pygame.image.load(f"{background}")
             self.background = pygame.transform.scale(self.background, (largura, altura))
         except:
             # Fallback para fundo cinza se a imagem não for encontrada
@@ -59,18 +60,26 @@ class CombatSystem:
                 sys.exit()
             elif event.type == pygame.KEYDOWN:
                 if self.player_turn:
-                    if event.key == pygame.K_1:  # Attack
+                    if event.key == pygame.K_1:  # Atacar
                         self.player_attack()
-                    elif event.key == pygame.K_2:  # Use Boots
-                        if self.inventory.has_item("Boots"):
+                    elif event.key == pygame.K_2:  # Usar Bota
+                        if self.used_item_this_round:
+                            self.error_message = "Apenas um item por turno!"
+                            self.error_start_time = pygame.time.get_ticks()
+                        elif self.inventory.has_item("Boots"):
                             self.inventory.use_item("Boots", self.player)
+                            self.used_item_this_round = True
                             self.error_message = None
                         else:
                             self.error_message = "Sem Botas!"
                             self.error_start_time = pygame.time.get_ticks()
-                    elif event.key == pygame.K_3:  # Use Umbrella
-                        if self.inventory.has_item("Umbrella"):
+                    elif event.key == pygame.K_3:  # Usar Guarda-chuva
+                        if self.used_item_this_round:
+                            self.error_message = "Apenas um item por turno!"
+                            self.error_start_time = pygame.time.get_ticks()
+                        elif self.inventory.has_item("Umbrella"):
                             self.inventory.use_item("Umbrella", self.player)
+                            self.used_item_this_round = True
                             self.error_message = None
                         else:
                             self.error_message = "Sem Guarda-chuva!"
@@ -82,6 +91,7 @@ class CombatSystem:
         damage = self.player.damage
         self.enemy.take_damage(damage)
         self.player_turn = False
+        self.used_item_this_round = False 
         if self.enemy.hp <= 0:
             self.combat_active = False
             self.result = "Victory"
@@ -90,6 +100,7 @@ class CombatSystem:
         damage = self.enemy.damage
         self.player.take_damage(damage)
         self.player_turn = True
+        self.used_item_this_round = False 
         if self.player.hp <= 0:
             self.combat_active = False
             self.result = "Defeat"
