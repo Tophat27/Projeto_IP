@@ -305,7 +305,7 @@ def iniciar_jogo():
         # Check for combat trigger
         combat_triggered = False
         if enemy and current_time - last_spawn_time > spawn_delay and (player.rect.colliderect(enemy.rect) or abs(player.rect.x - enemy.rect.x) < 10):
-            combat_system = CombatSystem(player, enemy, inventory, fonte_grande, fonte_media)
+            combat_system = CombatSystem(player, enemy, inventory, fonte_grande, fonte_media, caminhos_fundos[indice_cenario])
             result = combat_system.run_combat()
             if result == "Victory":
                 enemy = None
