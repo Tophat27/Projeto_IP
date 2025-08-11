@@ -8,7 +8,7 @@ from variaveis import get_size
 largura, _ = get_size()
 
 class Enemy:
-    def __init__(self, hp=80):
+    def __init__(self, hp=40):
         self.max_hp = hp
         self.hp = hp
         self.damage = random.randint(10, 30)  # 10-30% of player's max HP (100)

@@ -20,6 +20,9 @@ class CombatSystem:
         self.combat_active = True
         self.player_turn = True
         self.result = None
+        self.error_message = None
+        self.error_start_time = 0
+        self.error_duration = 1000
         # Load larger images for combat
         self.player_img = pygame.transform.scale(player.image, (largura // 8, altura // 4))
         self.enemy_img = pygame.transform.scale(enemy.image, (largura // 8, altura // 4))
@@ -44,10 +47,20 @@ class CombatSystem:
                 if self.player_turn:
                     if event.key == pygame.K_1:  # Attack
                         self.player_attack()
-                    elif event.key == pygame.K_2 and self.inventory.has_item("Boots"):  # Use Boots
-                        self.inventory.use_item("Boots", self.player)
-                    elif event.key == pygame.K_3 and self.inventory.has_item("Umbrella"):  # Use Umbrella
-                        self.inventory.use_item("Umbrella", self.player)
+                    elif event.key == pygame.K_2:  # Use Boots
+                        if self.inventory.has_item("Boots"):
+                            self.inventory.use_item("Boots", self.player)
+                            self.error_message = None
+                        else:
+                            self.error_message = "Sem Botas!"
+                            self.error_start_time = pygame.time.get_ticks()
+                    elif event.key == pygame.K_3:  # Use Umbrella
+                        if self.inventory.has_item("Umbrella"):
+                            self.inventory.use_item("Umbrella", self.player)
+                            self.error_message = None
+                        else:
+                            self.error_message = "Sem Guarda-chuva!"
+                            self.error_start_time = pygame.time.get_ticks()
         if not self.player_turn:
             self.enemy_attack()
 
@@ -75,16 +88,23 @@ class CombatSystem:
         # Draw HP bars
         self.draw_hp_bar(self.player.hp, 100, largura // 4, altura // 2 - 50, "Player")
         self.draw_hp_bar(self.enemy.hp, self.enemy.max_hp, 3 * largura // 4, altura // 2 - 50, "Enemy")
-        # Draw action menu with placeholders showing item counts
+        # Draw action menu horizontally
         if self.player_turn:
             actions = [
                 "1 - Atacar",
                 f"2 - Usar Bota ({self.inventory.items['Boots']})",
                 f"3 - Usar Guarda-chuva ({self.inventory.items['Umbrella']})"
             ]
+            total_width = sum(self.fonte_media.size(action)[0] + 40 for action in actions)  # 40px spacing
+            x_start = (largura - total_width) // 2  # Center horizontally
             for i, action in enumerate(actions):
                 text = self.fonte_media.render(action, True, (255, 255, 255))
-                tela_combat.blit(text, (largura // 2 - text.get_width() // 2, altura - 150 + i * 40))
+                tela_combat.blit(text, (x_start, altura - 100))
+                x_start += text.get_width() + 40  # Move right for next action
+        # Draw error message if present
+        if self.error_message and pygame.time.get_ticks() - self.error_start_time < self.error_duration:
+            error_text = self.fonte_media.render(self.error_message, True, (255, 0, 0))
+            tela_combat.blit(error_text, (largura // 2 - error_text.get_width() // 2, altura - 50))
         # Draw combat result
         if not self.combat_active:
             result_text = self.fonte_grande.render(self.result, True, (255, 255, 255))

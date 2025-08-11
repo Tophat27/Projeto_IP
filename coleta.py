@@ -21,7 +21,9 @@ cracha_img = pygame.transform.scale(cracha_img, (largura/15, altura/5))
 def coletaveis(indice_cenario, ultimo_cenario, jogador_x, jogador_y, personagem_img, bota_visivel, guarda_chuva_visivel, inventory):
     bota_posc = 150
     guarda_chuva_posc = 450
-    chao = 610
+    # Set chao to the top of the player's movement area (bottom 1/3 of screen)
+    area_movimento = altura // 4
+    chao = altura - area_movimento  # Align with the top of the movement area
     bota_rect = None
     guarda_chuva_rect = None
 
@@ -54,7 +56,7 @@ def coletaveis(indice_cenario, ultimo_cenario, jogador_x, jogador_y, personagem_
             guarda_chuva_rect = pygame.Rect(guarda_chuva_posc, chao, guarda_chuva_img.get_width(), guarda_chuva_img.get_height())
 
     if indice_cenario == 3:
-        tela_return.blit(cracha_img, (600, 300))
+        tela_return.blit(cracha_img, (600, chao))  # Also adjust cracha position
 
     ret_jogador = pygame.Rect(jogador_x, jogador_y, personagem_img.get_width(), personagem_img.get_height())
     if bota_rect and ret_jogador.colliderect(bota_rect) and bota_visivel:
