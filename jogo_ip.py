@@ -29,7 +29,7 @@ class Player:
         area_movimento = altura_tela // 3
         limite_y_min = altura_tela - area_movimento
         limite_y_max = altura_tela - self.image.get_height()
-        limite_x_min = 0
+        limite_x_min = -10  # Allow slight negative x to trigger transition
         limite_x_max = largura_tela - self.image.get_width()
         self.rect.clamp_ip(pygame.Rect(limite_x_min, limite_y_min, limite_x_max - limite_x_min, limite_y_max - limite_y_min))
 
@@ -277,6 +277,24 @@ def iniciar_jogo():
         if teclas[pygame.K_DOWN]:
             dy = 1
         player.move(dx, dy, velocidade, largura, altura)
+        # Debug print to track transition condition
+        if debug_mode:
+            print(f"Player x: {player.rect.x}, Scenario: {indice_cenario}")
+        # Scenario change logic
+        if player.rect.x <= -10 and indice_cenario < len(cenarios) - 1:
+            indice_cenario += 1
+            player.rect.x = largura - player.image.get_width()
+            enemy = None
+            enemy_defeated_in_scenario[indice_cenario] = False
+            last_spawn_time = current_time
+            print(f"Transitioned to next scenario: {indice_cenario}")
+        elif player.rect.x > largura - player.image.get_width() and indice_cenario > 0:
+            indice_cenario -= 1
+            player.rect.x = 0
+            enemy = None
+            enemy_defeated_in_scenario[indice_cenario] = False
+            last_spawn_time = current_time
+            print(f"Transitioned to previous scenario: {indice_cenario}")
         # Spawn enemy only after delay, if player moves leftward, and if not defeated in this scenario
         if not enemy and not enemy_defeated_in_scenario[indice_cenario] and current_time - last_spawn_time > spawn_delay and player.rect.x < largura - 100:
             enemy = Enemy()
@@ -290,26 +308,14 @@ def iniciar_jogo():
             combat_system = CombatSystem(player, enemy, inventory, fonte_grande, fonte_media)
             result = combat_system.run_combat()
             if result == "Victory":
-                enemy = None  # Remove enemy
-                enemy_defeated_in_scenario[indice_cenario] = True  # Mark enemy as defeated in this scenario
-                last_spawn_time = current_time  # Reset spawn delay
+                enemy = None
+                enemy_defeated_in_scenario[indice_cenario] = True
+                player.hp = min(player.hp +20, 100)
+                last_spawn_time = current_time
             elif result == "Defeat":
                 pygame.quit()
-                sys.exit()  # Game over
+                sys.exit()
             combat_triggered = True
-        # Scenario change logic (moved outside combat_triggered block)
-        if player.rect.x < 0 and indice_cenario < len(cenarios) - 1:
-            indice_cenario += 1
-            player.rect.x = largura - player.image.get_width()
-            enemy = None  # Reset enemy
-            enemy_defeated_in_scenario[indice_cenario] = False  # Allow new enemy in new scenario
-            last_spawn_time = current_time
-        elif player.rect.x > largura - player.image.get_width() and indice_cenario > 0:
-            indice_cenario -= 1
-            player.rect.x = 0
-            enemy = None  # Reset enemy
-            enemy_defeated_in_scenario[indice_cenario] = False  # Allow new enemy in new scenario
-            last_spawn_time = current_time
         # Draw scenario
         tela.blit(cenarios[indice_cenario], (0, 0))
         if chao_sprite:
