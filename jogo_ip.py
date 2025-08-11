@@ -8,6 +8,7 @@ from enemy import Enemy
 from combat import CombatSystem
 from inventory import Inventory
 from PIL import Image
+from musica_config import inicializar_musica_jogo, tocar_musica_jogo, parar_musica_jogo, inicializar_musica_combate, inicializar_som_ataque, inicializar_som_ataque_inimigo, inicializar_som_vitoria
 
 # ============ PLAYER CLASS ============
 class Player:
@@ -82,6 +83,7 @@ def aplicar_limites_movimento(player, largura_tela, altura_tela):
     return limites_debug_rect
 
 pygame.init()
+pygame.mixer.init()  # Inicializar sistema de áudio
 
 tela = tela()
 
@@ -98,6 +100,50 @@ creditos_buttom = pygame.transform.scale(creditos_buttom, (largura // 7, altura 
 
 sair_buttom = pygame.image.load("images/sair_buttom.png")
 sair_buttom = pygame.transform.scale(sair_buttom, (largura // 7, altura // 7))
+
+# Carregando música de fundo para o menu
+try:
+    pygame.mixer.music.load("SFX/Time for a Smackdown.mp3")
+    pygame.mixer.music.set_volume(0.25)  # Volume em 25%
+    print("Música carregada com sucesso")
+except Exception as e:
+    print(f"Erro ao carregar música: {e}")
+    pygame.mixer.music = None
+
+# Carregando música de fundo para o jogo
+try:
+    inicializar_musica_jogo()
+    print("Música do jogo carregada com sucesso")
+except Exception as e:
+    print(f"Erro ao carregar música do jogo: {e}")
+
+# Carregando música de combate
+try:
+    inicializar_musica_combate()
+    print("Música de combate carregada com sucesso")
+except Exception as e:
+    print(f"Erro ao carregar música de combate: {e}")
+
+# Carregando som de ataque
+try:
+    inicializar_som_ataque()
+    print("Som de ataque carregado com sucesso")
+except Exception as e:
+    print(f"Erro ao carregar som de ataque: {e}")
+
+# Carregando som de ataque do inimigo
+try:
+    inicializar_som_ataque_inimigo()
+    print("Som de ataque do inimigo carregado com sucesso")
+except Exception as e:
+    print(f"Erro ao carregar som de ataque do inimigo: {e}")
+
+# Carregando som de vitória
+try:
+    inicializar_som_vitoria()
+    print("Som de vitória carregado com sucesso")
+except Exception as e:
+    print(f"Erro ao carregar som de vitória: {e}")
 
 # Carregando sprite de chão (opcional - se existir)
 try:
@@ -168,6 +214,11 @@ def desenhar_botao(img_buttom, x, y, acao=None):
         tela.blit(img_buttom, (x, y))
 
 def mostrar_creditos():
+    # Parar música do menu
+    if pygame.mixer.music:
+        pygame.mixer.music.stop()
+        print("Música do menu parada")
+    
     mostrando = True
     fonte_pequena = pygame.font.SysFont("Arial", 30)
     while mostrando:
@@ -177,6 +228,10 @@ def mostrar_creditos():
                 sys.exit()
             elif evento.type == pygame.KEYDOWN and evento.key == pygame.K_ESCAPE:
                 mostrando = False
+                # Retomar música do menu
+                if pygame.mixer.music:
+                    pygame.mixer.music.play(-1)
+                    print("Música do menu retomada")
         tela.fill((0, 0, 0))
         texto = fonte_grande.render("Créditos", True, branco)
         texto_nome = fonte_media.render("Desenvolvido por Pedro (phhs)", True, branco)
@@ -190,6 +245,11 @@ def mostrar_creditos():
             "2 - Usar Botas (em combate, se disponível)",
             "3 - Usar Guarda-chuva (em combate, se disponível)",
             "",
+            "Controles de Áudio:",
+            "M - Mutar/Desmutar música",
+            "+ - Aumentar volume",
+            "- - Diminuir volume",
+            "",
             "Recursos Adicionados:",
             "• Sistema de combate por turnos",
             "• Sistema de inventário",
@@ -197,7 +257,8 @@ def mostrar_creditos():
             "• Sistema de debug visual",
             "• Visualização de colisões",
             "• Limites de movimento melhorados",
-            "• Suporte para sprite de chão"
+            "• Suporte para sprite de chão",
+            "• Música de fundo em loop"
         ]
         tela.blit(texto, (largura // 2 - 150, 50))
         tela.blit(texto_nome, (largura // 2 - 300, 150))
@@ -220,6 +281,14 @@ def mostrar_creditos():
         pygame.display.flip()
 
 def iniciar_jogo():
+    # Parar música do menu
+    if pygame.mixer.music:
+        pygame.mixer.music.stop()
+        print("Música do menu parada")
+    
+    # Iniciar música do jogo em loop
+    tocar_musica_jogo()
+    
     global debug_mode, mostrar_colisoes
     bota_visivel = True
     guarda_chuva_visivel = True
@@ -233,12 +302,68 @@ def iniciar_jogo():
         imagem = pygame.image.load(caminho)
         imagem = pygame.transform.scale(imagem, (largura, altura))
         cenarios.append(imagem)
-    # Carregando personagem
-    personagem_original = pygame.image.load("images/kakashi.png")
-    personagem_original = pygame.transform.scale(personagem_original, (largura // 16, altura // 8))
-    personagem_espelhado = pygame.transform.flip(personagem_original, True, False)
+    # Carregando sprite de personagem (GIF animado)
+    try:
+        gif_personagem = Image.open("images/john ip.gif")
+        frames_personagem = []
+        for frame in range(gif_personagem.n_frames):
+            gif_personagem.seek(frame)
+            frame_surface = pygame.image.fromstring(gif_personagem.convert("RGBA").tobytes(), gif_personagem.size, "RGBA")
+            frame_surface = pygame.transform.scale(frame_surface, (largura // 16, altura // 8))
+            frames_personagem.append(frame_surface)
+        
+        # Criar versões espelhadas para movimento para a esquerda
+        frames_personagem_espelhados = []
+        for frame in frames_personagem:
+            frame_espelhado = pygame.transform.flip(frame, True, False)
+            frames_personagem_espelhados.append(frame_espelhado)
+        
+        personagem_original = frames_personagem[0]
+        personagem_espelhado = frames_personagem_espelhados[0]
+        personagem_frame_index = 0
+        personagem_frame_delay = 150
+        personagem_last_update = pygame.time.get_ticks()
+        
+        # Carregar GIF de caminhada
+        gif_caminhada = Image.open("images/John ip Walk.gif")
+        frames_caminhada = []
+        for frame in range(gif_caminhada.n_frames):
+            gif_caminhada.seek(frame)
+            frame_surface = pygame.image.fromstring(gif_caminhada.convert("RGBA").tobytes(), gif_caminhada.size, "RGBA")
+            frame_surface = pygame.transform.scale(frame_surface, (largura // 16, altura // 8))
+            frames_caminhada.append(frame_surface)
+        
+        # Criar versões espelhadas para caminhada
+        frames_caminhada_espelhados = []
+        for frame in frames_caminhada:
+            frame_espelhado = pygame.transform.flip(frame, True, False)
+            frames_caminhada_espelhados.append(frame_espelhado)
+        
+        caminhada_frame_index = 0
+        caminhada_frame_delay = 100  # Mais rápido que o sprite parado
+        caminhada_last_update = pygame.time.get_ticks()
+        
+    except:
+        # Fallback para imagem estática
+        personagem_original = pygame.image.load("images/john ip.gif")
+        personagem_original = pygame.transform.scale(personagem_original, (largura // 16, altura // 8))
+        personagem_espelhado = pygame.transform.flip(personagem_original, True, False)
+        frames_personagem = None
+        frames_caminhada = None
     # Initialize player
     player = Player(personagem_original, largura - personagem_original.get_width() - 5, altura - personagem_original.get_height() - 5)
+    if 'frames_personagem' in locals() and frames_personagem:
+        player.frames_personagem = frames_personagem
+        player.frames_personagem_espelhados = frames_personagem_espelhados
+        player.personagem_frame_index = personagem_frame_index
+        player.personagem_frame_delay = personagem_frame_delay
+        player.personagem_last_update = personagem_last_update
+    if 'frames_caminhada' in locals() and frames_caminhada:
+        player.frames_caminhada = frames_caminhada
+        player.frames_caminhada_espelhados = frames_caminhada_espelhados
+        player.caminhada_frame_index = caminhada_frame_index
+        player.caminhada_frame_delay = caminhada_frame_delay
+        player.caminhada_last_update = caminhada_last_update
     velocidade = 10
     clock = pygame.time.Clock()
     fps = 60
@@ -277,6 +402,33 @@ def iniciar_jogo():
         if teclas[pygame.K_DOWN]:
             dy = 1
         player.move(dx, dy, velocidade, largura, altura)
+        
+        # Update character animation if using GIF
+        if 'frames_personagem' in locals() and frames_personagem:
+            current_time = pygame.time.get_ticks()
+            
+            # Verificar se o jogador está se movendo
+            is_moving = any([teclas[pygame.K_LEFT], teclas[pygame.K_RIGHT], teclas[pygame.K_UP], teclas[pygame.K_DOWN]])
+            
+            if is_moving and hasattr(player, 'frames_caminhada') and player.frames_caminhada:
+                # Usar animação de caminhada
+                if current_time - player.caminhada_last_update > player.caminhada_frame_delay:
+                    player.caminhada_frame_index = (player.caminhada_frame_index + 1) % len(player.frames_caminhada)
+                    player.caminhada_last_update = current_time
+                    if player.looking_right:
+                        player.image = player.frames_caminhada_espelhados[player.caminhada_frame_index]
+                    else:
+                        player.image = player.frames_caminhada[player.caminhada_frame_index]
+            else:
+                # Usar animação parada
+                if current_time - player.personagem_last_update > player.personagem_frame_delay:
+                    player.personagem_frame_index = (player.personagem_frame_index + 1) % len(frames_personagem)
+                    player.personagem_last_update = current_time
+                    if player.looking_right:
+                        player.image = frames_personagem_espelhados[player.personagem_frame_index]
+                    else:
+                        player.image = frames_personagem[player.personagem_frame_index]
+        
         # Debug print to track transition condition
         if debug_mode:
             print(f"Player x: {player.rect.x}, Scenario: {indice_cenario}")
@@ -343,16 +495,48 @@ def iniciar_jogo():
 
 # Tela de menu principal
 def menu_principal():
+    # Iniciar música em loop
+    if pygame.mixer.music:
+        pygame.mixer.music.play(-1)  # -1 significa loop infinito
+        print("Música iniciada em loop")
+    
     while True:
         tela.blit(imagem_tela_inicio, (0, 0))
         desenhar_botao(jogar_buttom, largura // 2 - 150, altura // 2 - 100, iniciar_jogo)
         desenhar_botao(creditos_buttom, largura // 2 - 150, altura // 2 + 0, mostrar_creditos)
         desenhar_botao(sair_buttom, largura // 2 - 150, altura // 2 + 100, pygame.quit)
         desenhar_chuva()
+        
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+            elif evento.type == pygame.KEYDOWN:
+                # Controles de volume
+                if evento.key == pygame.K_PLUS or evento.key == pygame.K_KP_PLUS:
+                    # Aumentar volume
+                    if pygame.mixer.music:
+                        current_volume = pygame.mixer.music.get_volume()
+                        new_volume = min(1.0, current_volume + 0.1)
+                        pygame.mixer.music.set_volume(new_volume)
+                        print(f"Volume: {int(new_volume * 100)}%")
+                elif evento.key == pygame.K_MINUS or evento.key == pygame.K_KP_MINUS:
+                    # Diminuir volume
+                    if pygame.mixer.music:
+                        current_volume = pygame.mixer.music.get_volume()
+                        new_volume = max(0.0, current_volume - 0.1)
+                        pygame.mixer.music.set_volume(new_volume)
+                        print(f"Volume: {int(new_volume * 100)}%")
+                elif evento.key == pygame.K_m:
+                    # Mutar/desmutar música
+                    if pygame.mixer.music:
+                        if pygame.mixer.music.get_volume() > 0:
+                            pygame.mixer.music.set_volume(0.0)
+                            print("Música mutada")
+                        else:
+                            pygame.mixer.music.set_volume(0.25)
+                            print("Música desmutada")
+        
         pygame.display.flip()
 
 menu_principal()
