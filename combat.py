@@ -5,6 +5,8 @@ import pygame
 import sys
 from variaveis import get_size
 from tela import tela
+from PIL import Image  # Added for GIF handling
+from musica_config import parar_musica_jogo, retomar_musica_jogo, tocar_musica_combate, parar_musica_combate, tocar_som_ataque, tocar_som_ataque_inimigo, tocar_som_vitoria
 
 # Initializing screen for combat
 largura, altura = get_size()
@@ -24,8 +26,39 @@ class CombatSystem:
         self.error_start_time = 0
         self.error_duration = 1000  # 1 segundo em milissegundos
         self.used_item_this_round = False  # Rastrear uso de item no turno
+        
+        # Parar música do jogo durante o combate
+        parar_musica_jogo()
+        
+        # Tocar música de combate
+        tocar_musica_combate()
+        
+        # Carregar imagem "TOMOU FALTA"
+        try:
+            self.tomou_falta_img = pygame.image.load("images/Tomou falta.png")
+            self.tomou_falta_img = pygame.transform.scale(self.tomou_falta_img, (largura, altura))
+        except:
+            # Fallback para tela preta com texto se a imagem não for encontrada
+            self.tomou_falta_img = None
+        
+        # Carregar som de derrota
+        try:
+            self.som_derrota = pygame.mixer.Sound("SFX/dark-souls-you-died-sound-effect_hm5sYFG.mp3")
+        except:
+            self.som_derrota = None
+        
         # Carregar imagens maiores para combate
-        self.player_img = pygame.transform.scale(player.image, (largura // 8, altura // 4))
+        if hasattr(player, 'frames_caminhada') and hasattr(player, 'caminhada_frame_index') and player.frames_caminhada:
+            # Usar o frame de caminhada se disponível
+            current_frame = player.frames_caminhada[player.caminhada_frame_index]
+            self.player_img = pygame.transform.scale(current_frame, (largura // 8, altura // 4))
+        elif hasattr(player, 'frames_personagem') and hasattr(player, 'personagem_frame_index') and player.frames_personagem:
+            # Usar o frame atual se for GIF animado
+            current_frame = player.frames_personagem[player.personagem_frame_index]
+            self.player_img = pygame.transform.scale(current_frame, (largura // 8, altura // 4))
+        else:
+            # Fallback para imagem estática
+            self.player_img = pygame.transform.scale(player.image, (largura // 8, altura // 4))
         self.enemy_img = pygame.transform.scale(enemy.image, (largura // 8, altura // 4))
         # Carregar fundo principal
         try:
@@ -51,6 +84,11 @@ class CombatSystem:
             self.render_combat()
             pygame.display.flip()
             clock.tick(60)
+        
+        # Retomar música do jogo após o combate
+        parar_musica_combate()
+        retomar_musica_jogo()
+        
         return self.result
 
     def handle_events(self):
@@ -88,6 +126,9 @@ class CombatSystem:
             self.enemy_attack()
 
     def player_attack(self):
+        # Tocar som de ataque
+        tocar_som_ataque()
+        
         damage = self.player.damage
         self.enemy.take_damage(damage)
         self.player_turn = False
@@ -95,8 +136,13 @@ class CombatSystem:
         if self.enemy.hp <= 0:
             self.combat_active = False
             self.result = "Victory"
+            # Tocar som de vitória
+            tocar_som_vitoria()
 
     def enemy_attack(self):
+        # Tocar som de ataque do inimigo
+        tocar_som_ataque_inimigo()
+        
         damage = self.enemy.damage
         self.player.take_damage(damage)
         self.player_turn = True
@@ -104,6 +150,11 @@ class CombatSystem:
         if self.player.hp <= 0:
             self.combat_active = False
             self.result = "Defeat"
+            # Tocar som de derrota
+            if self.som_derrota:
+                self.som_derrota.play()
+            # Mostrar tela "TOMOU FALTA"
+            self.show_tomou_falta_screen()
 
     def render_combat(self):
         # Desenhar fundo principal
@@ -139,6 +190,35 @@ class CombatSystem:
         if not self.combat_active:
             result_text = self.fonte_grande.render(self.result, True, (255, 255, 255))
             tela_combat.blit(result_text, (largura // 2 - result_text.get_width() // 2, altura // 2))
+
+    def show_tomou_falta_screen(self):
+        """Mostra a tela 'TOMOU FALTA' e aguarda o jogador pressionar uma tecla"""
+        waiting_for_input = True
+        
+        while waiting_for_input:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                elif event.type == pygame.KEYDOWN:
+                    waiting_for_input = False
+                    break
+            
+            # Desenhar a tela "TOMOU FALTA"
+            if self.tomou_falta_img:
+                # Usar a imagem se disponível
+                tela_combat.blit(self.tomou_falta_img, (0, 0))
+            else:
+                # Fallback para tela preta com texto
+                tela_combat.fill((0, 0, 0))
+                texto_tomou_falta = self.fonte_grande.render("TOMOU FALTA", True, (139, 0, 0))  # Vermelho escuro
+                texto_pressione = self.fonte_media.render("Pressione qualquer tecla para continuar", True, (255, 255, 255))
+                
+                tela_combat.blit(texto_tomou_falta, (largura // 2 - texto_tomou_falta.get_width() // 2, altura // 2 - 50))
+                tela_combat.blit(texto_pressione, (largura // 2 - texto_pressione.get_width() // 2, altura // 2 + 50))
+            
+            pygame.display.flip()
+            pygame.time.delay(100)  # Pequeno delay para não sobrecarregar a CPU
 
     def draw_hp_bar(self, current_hp, max_hp, x, y, label):
         bar_width = 100
