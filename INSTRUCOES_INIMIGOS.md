@@ -8,28 +8,28 @@ O sistema foi implementado para que cada cenário tenha um tipo específico de i
 ### 1. **Entrada UFPE** - Tipo: "entrada"
 - **Imagem**: `images/inimigo 1.gif` (GIF animado)
 - **HP**: 20
-- **Dano**: 8-20
+- **Dano**: 3-15
 - **Comportamento**: Movimento simples + animação GIF
 - **Características**: Ideal para jogadores iniciantes, com animação
 
 ### 2. **Biblioteca Central** - Tipo: "biblioteca"
 - **Imagem**: `images/clippy-microsoft.gif` (GIF animado)
 - **HP**: 35
-- **Dano**: 12-25
+- **Dano**: 7-20
 - **Comportamento**: Movimento suave com variação sutil + animação GIF
 - **Características**: Inimigo de dificuldade média, com animação
 
 ### 3. **RU** - Tipo: "ru"
 - **Imagem**: `images/crocodile.gif` (GIF animado)
 - **HP**: 50
-- **Dano**: 15-30
+- **Dano**: 10-25
 - **Comportamento**: Movimento errático e imprevisível + animação GIF
 - **Características**: Inimigo mais desafiador, com animação
 
 ### 4. **CIn** - Tipo: "cin"
 - **Imagem**: `images/image-removebg-preview.png`
 - **HP**: 70
-- **Dano**: 20-35
+- **Dano**: 15-30
 - **Comportamento**: Movimento agressivo com variação horizontal
 - **Características**: Boss final, inimigo mais forte
 
@@ -47,10 +47,10 @@ Se você não criar as imagens específicas, o sistema usará `images/enemy.png`
 ## Características do Sistema
 
 ### Progressão de Dificuldade
-- **Cenário 0 (Entrada)**: Inimigo mais fraco (20 HP, 8-20 dano)
-- **Cenário 1 (Biblioteca)**: Inimigo médio (35 HP, 12-25 dano)
-- **Cenário 2 (RU)**: Inimigo forte (50 HP, 15-30 dano)
-- **Cenário 3 (CIn)**: Boss final (70 HP, 20-35 dano)
+- **Cenário 0 (Entrada)**: Inimigo mais fraco (20 HP, 3-15 dano)
+- **Cenário 1 (Biblioteca)**: Inimigo médio (35 HP, 7-20 dano)
+- **Cenário 2 (RU)**: Inimigo forte (50 HP, 10-25 dano)
+- **Cenário 3 (CIn)**: Boss final (70 HP, 15-30 dano)
 
 ### Comportamentos Únicos
 - **Entrada**: Movimento simples e previsível
