@@ -47,19 +47,37 @@ class CombatSystem:
         except:
             self.som_derrota = None
         
-        # Carregar imagens maiores para combate
+        # Carregar imagens maiores para combate com orientação correta
         if hasattr(player, 'frames_caminhada') and hasattr(player, 'caminhada_frame_index') and player.frames_caminhada:
             # Usar o frame de caminhada se disponível
             current_frame = player.frames_caminhada[player.caminhada_frame_index]
+            # Espelhar baseado na direção que o jogador está olhando
+            if hasattr(player, 'looking_right') and player.looking_right:
+                current_frame = pygame.transform.flip(current_frame, True, False)
             self.player_img = pygame.transform.scale(current_frame, (largura // 8, altura // 4))
         elif hasattr(player, 'frames_personagem') and hasattr(player, 'personagem_frame_index') and player.frames_personagem:
             # Usar o frame atual se for GIF animado
             current_frame = player.frames_personagem[player.personagem_frame_index]
+            # Espelhar baseado na direção que o jogador está olhando
+            if hasattr(player, 'looking_right') and player.looking_right:
+                current_frame = pygame.transform.flip(current_frame, True, False)
             self.player_img = pygame.transform.scale(current_frame, (largura // 8, altura // 4))
         else:
             # Fallback para imagem estática
-            self.player_img = pygame.transform.scale(player.image, (largura // 8, altura // 4))
-        self.enemy_img = pygame.transform.scale(enemy.image, (largura // 8, altura // 4))
+            player_img = player.image
+            # Espelhar baseado na direção que o jogador está olhando
+            if hasattr(player, 'looking_right') and player.looking_right:
+                player_img = pygame.transform.flip(player_img, True, False)
+            self.player_img = pygame.transform.scale(player_img, (largura // 8, altura // 4))
+        
+        # Para o inimigo, sempre olhar para a esquerda (em direção ao jogador)
+        enemy_img = enemy.image
+        if hasattr(enemy, 'frames') and enemy.frames:
+            # Se for GIF animado, usar o frame atual
+            enemy_img = enemy.frames[enemy.frame_index] if enemy.frame_index < len(enemy.frames) else enemy.image
+        # Espelhar o inimigo para sempre olhar para a esquerda (em direção ao jogador)
+        enemy_img = pygame.transform.flip(enemy_img, True, False)
+        self.enemy_img = pygame.transform.scale(enemy_img, (largura // 8, altura // 4))
         # Carregar fundo principal
         try:
             self.background = pygame.image.load(f"{background}")

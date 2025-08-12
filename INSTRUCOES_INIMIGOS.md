@@ -64,6 +64,12 @@ Se alguma imagem não for encontrada, o sistema:
 2. Se falhar, cria um inimigo vermelho padrão
 3. Mantém as estatísticas apropriadas para o cenário
 
+### Orientação dos Personagens no Combate
+- **Jogador**: Mantém a direção que estava olhando antes do combate
+- **Inimigo**: Sempre olha para a esquerda (em direção ao jogador)
+- **Espelhamento Automático**: GIFs e imagens são automaticamente espelhados conforme necessário
+- **Consistência Visual**: A orientação é mantida durante todo o combate
+
 ## Benefícios da Implementação
 
 1. **Variedade**: Cada cenário oferece uma experiência única
@@ -71,6 +77,7 @@ Se alguma imagem não for encontrada, o sistema:
 3. **Imersão**: Inimigos temáticos para cada local
 4. **Balanceamento**: Estatísticas apropriadas para cada fase
 5. **Robustez**: Sistema de fallback para evitar erros
+6. **Orientação Correta**: Personagens mantêm sua direção durante o combate
 
 ## Testando o Sistema
 
