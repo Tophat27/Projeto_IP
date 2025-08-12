@@ -292,6 +292,7 @@ def iniciar_jogo():
     global debug_mode, mostrar_colisoes
     bota_visivel = True
     guarda_chuva_visivel = True
+    cracha_visivel = True
     ultimo_cenario = 0
     # Initialize inventory
     inventory = Inventory()
@@ -477,7 +478,7 @@ def iniciar_jogo():
         if enemy:
             tela.blit(enemy.image, enemy.rect.topleft)
         # Draw collectibles
-        bota_rect, guarda_chuva_rect, bota_visivel, guarda_chuva_visivel = coletaveis(indice_cenario, ultimo_cenario, player.rect.x, player.rect.y, player.image, bota_visivel, guarda_chuva_visivel, inventory)
+        bota_rect, guarda_chuva_rect, bota_visivel, guarda_chuva_visivel, cracha_visivel = coletaveis(indice_cenario, ultimo_cenario, player.rect.x, player.rect.y, player.image, bota_visivel, guarda_chuva_visivel, inventory, cracha_visivel)
         # Draw inventory
         inventory.draw(tela)
         # Debug and collision visuals

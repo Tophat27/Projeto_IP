@@ -16,7 +16,9 @@ def tela():
     pos_y = (altura - altura_tela) // 2
     
     # Criar a janela
-    tela = pygame.display.set_mode((int(largura_tela), int(altura_tela)))
+    # tela = pygame.display.set_mode((int(largura_tela), int(altura_tela)))
+
+    tela = pygame.display.set_mode((largura- (largura/15), altura - (altura/15)))
     pygame.display.set_caption("Game UFPE_Alagada")
     
     # Definir a posição da janela (funciona em alguns sistemas)

@@ -11,7 +11,7 @@ class Inventory:
     def __init__(self):
         self.items = {"Boots": 0, "Umbrella": 0}
         self.slot_img = pygame.image.load("images/slot_inventario.png")
-        self.slot_img = pygame.transform.scale(self.slot_img, (largura // 10, altura // 10))
+        self.slot_img = pygame.transform.scale(self.slot_img, (largura // 8, altura // 8))
         self.fonte_pequena = pygame.font.SysFont("Arial", 30)
 
     def add_item(self, item_name):
