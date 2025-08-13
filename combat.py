@@ -12,6 +12,58 @@ from musica_config import parar_musica_jogo, retomar_musica_jogo, tocar_musica_c
 largura, altura = get_size()
 tela_combat = tela()
 
+class DamageParticle:
+    """Classe para partículas de dano animadas"""
+    def __init__(self, x, y, damage, is_player=True):
+        self.x = x
+        self.y = y
+        self.damage = damage
+        self.is_player = is_player
+        self.velocity_y = -3  # Movimento para cima mais rápido
+        self.velocity_x = 0
+        self.life = 90  # Frames de vida (1.5 segundos a 60fps)
+        self.alpha = 255  # Transparência
+        self.scale = 1.0  # Escala do texto
+        self.original_life = 90
+        
+    def update(self):
+        self.y += self.velocity_y
+        self.velocity_y += 0.15  # Gravidade mais forte
+        self.life -= 1
+        
+        # Calcular transparência e escala baseado na vida restante
+        life_ratio = self.life / self.original_life
+        self.alpha = max(0, int(life_ratio * 255))
+        self.scale = 0.8 + (life_ratio * 0.4)  # Escala de 0.8 a 1.2
+        
+        return self.life > 0
+        
+    def draw(self, screen, font):
+        if self.life > 0:
+            # Escolher cor baseada no tipo de dano
+            if self.is_player:
+                color = (255, 50, 50)  # Vermelho vibrante para dano do jogador
+            else:
+                color = (255, 100, 100)  # Vermelho mais claro para dano do inimigo
+            
+            # Renderizar texto
+            text = font.render(f"-{self.damage}", True, color)
+            
+            # Aplicar escala (simulada com tamanho de fonte)
+            scaled_font = pygame.font.Font(None, int(font.get_height() * self.scale))
+            text = scaled_font.render(f"-{self.damage}", True, color)
+            
+            # Aplicar transparência
+            text.set_alpha(self.alpha)
+            
+            # Desenhar com sombra para melhor visibilidade
+            shadow = scaled_font.render(f"-{self.damage}", True, (0, 0, 0))
+            shadow.set_alpha(self.alpha // 2)
+            screen.blit(shadow, (self.x - text.get_width() // 2 + 1, self.y + 1))
+            
+            # Desenhar texto principal
+            screen.blit(text, (self.x - text.get_width() // 2, self.y))
+
 class CombatSystem:
     def __init__(self, player, enemy, inventory, fonte_grande, fonte_media, background):
         self.player = player
@@ -26,6 +78,15 @@ class CombatSystem:
         self.error_start_time = 0
         self.error_duration = 1000  # 1 segundo em milissegundos
         self.used_item_this_round = False  # Rastrear uso de item no turno
+        
+        # Variáveis para mostrar dano do turno anterior
+        self.last_player_damage = 0
+        self.last_enemy_damage = 0
+        self.damage_display_time = 0
+        self.damage_display_duration = 2000  # 2 segundos para mostrar o dano
+        
+        # Sistema de partículas de dano
+        self.damage_particles = []
         
         # Parar música do jogo durante o combate
         parar_musica_jogo()
@@ -149,6 +210,16 @@ class CombatSystem:
         
         damage = self.player.damage
         self.enemy.take_damage(damage)
+        
+        # Rastrear dano causado pelo jogador
+        self.last_player_damage = damage
+        self.damage_display_time = pygame.time.get_ticks()
+        
+        # Criar partícula de dano
+        particle_x = 3 * largura // 4  # Posição do inimigo
+        particle_y = altura // 2 - 80
+        self.damage_particles.append(DamageParticle(particle_x, particle_y, damage, is_player=True))
+        
         self.player_turn = False
         self.used_item_this_round = False 
         if self.enemy.hp <= 0:
@@ -163,6 +234,16 @@ class CombatSystem:
         
         damage = self.enemy.damage
         self.player.take_damage(damage)
+        
+        # Rastrear dano causado pelo inimigo
+        self.last_enemy_damage = damage
+        self.damage_display_time = pygame.time.get_ticks()
+        
+        # Criar partícula de dano
+        particle_x = largura // 4  # Posição do jogador
+        particle_y = altura // 2 - 80
+        self.damage_particles.append(DamageParticle(particle_x, particle_y, damage, is_player=False))
+        
         self.player_turn = True
         self.used_item_this_round = False 
         if self.player.hp <= 0:
@@ -187,6 +268,9 @@ class CombatSystem:
         # Desenhar barras de HP
         self.draw_hp_bar(self.player.hp, 100, largura // 4, altura // 2 - 50, "Player")
         self.draw_hp_bar(self.enemy.hp, self.enemy.max_hp, 3 * largura // 4, altura // 2 - 50, "Enemy")
+        
+        # Desenhar números de dano do turno anterior
+        self.draw_damage_numbers()
         # Desenhar menu de ações horizontalmente
         if self.player_turn:
             actions = [
@@ -246,3 +330,12 @@ class CombatSystem:
         pygame.draw.rect(tela_combat, (0, 255, 0), (x, y, fill, bar_height))  # Health
         hp_text = self.fonte_media.render(f"{label}: {current_hp}/{max_hp}", True, (255, 255, 255))
         tela_combat.blit(hp_text, (x, y - 30))
+
+    def draw_damage_numbers(self):
+        """Desenha os números de dano do turno anterior acima dos personagens"""
+        # Atualizar e desenhar partículas de dano
+        for particle in self.damage_particles[:]:
+            if not particle.update():
+                self.damage_particles.remove(particle)
+            else:
+                particle.draw(tela_combat, self.fonte_media)

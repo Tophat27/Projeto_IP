@@ -70,6 +70,13 @@ Se alguma imagem não for encontrada, o sistema:
 - **Espelhamento Automático**: GIFs e imagens são automaticamente espelhados conforme necessário
 - **Consistência Visual**: A orientação é mantida durante todo o combate
 
+### Sistema de Exibição de Dano
+- **Partículas Animadas**: Números de dano aparecem como partículas flutuantes
+- **Duração**: Dano é exibido por 1.5 segundos após ser causado
+- **Animação**: Números flutuam para cima com gravidade e transparência
+- **Cores**: Dano do jogador em vermelho vibrante, dano do inimigo em vermelho claro
+- **Posicionamento**: Dano aparece acima do personagem que recebeu o ataque
+
 ## Benefícios da Implementação
 
 1. **Variedade**: Cada cenário oferece uma experiência única
@@ -78,6 +85,7 @@ Se alguma imagem não for encontrada, o sistema:
 4. **Balanceamento**: Estatísticas apropriadas para cada fase
 5. **Robustez**: Sistema de fallback para evitar erros
 6. **Orientação Correta**: Personagens mantêm sua direção durante o combate
+7. **Feedback Visual**: Sistema de partículas de dano para melhor experiência do usuário
 
 ## Testando o Sistema
 
