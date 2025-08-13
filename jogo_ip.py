@@ -9,7 +9,7 @@ from combat import CombatSystem
 from inventory import Inventory
 from PIL import Image
 from musica_config import inicializar_musica_jogo, tocar_musica_jogo, parar_musica_jogo, inicializar_musica_combate, inicializar_som_ataque, inicializar_som_ataque_inimigo, inicializar_som_vitoria
-
+from storytelling import *
 # ============ PLAYER CLASS ============
 class Player:
     def __init__(self, image, x, y):
@@ -90,6 +90,10 @@ tela = tela()
 # Tela de início (imagem)
 imagem_tela_inicio = pygame.image.load("images/tela_inicial.png")
 imagem_tela_inicio = pygame.transform.scale(imagem_tela_inicio, (largura, altura))
+
+#Imagem do balão de fala
+caixa = pygame.image.load('images/balao_ip.png').convert_alpha()
+caixa = pygame.transform.scale(caixa, (280, 230))
 
 # Carregando botões
 jogar_buttom = pygame.image.load("images/jogar_buttom.png")
@@ -379,6 +383,7 @@ def iniciar_jogo():
     spawn_delay = 1000  # 1-second delay before enemy can spawn (in milliseconds)
     last_spawn_time = pygame.time.get_ticks()
     enemy_defeated_in_scenario = {i: False for i in range(len(cenarios))}  # Track defeated enemies per scenario
+    alocar_caixa(tela, player.rect, "Essa não, a UFPE alagou!")
     # Loop principal
     while True:
         current_time = pygame.time.get_ticks()
@@ -449,6 +454,12 @@ def iniciar_jogo():
             enemy_defeated_in_scenario[indice_cenario] = False
             last_spawn_time = current_time
             print(f"Transitioned to next scenario: {indice_cenario}")
+            if indice_cenario == 1:
+                alocar_caixa(tela, player.rect, "Era uma vez os livros...")
+            elif indice_cenario == 2:
+                alocar_caixa(tela, player.rect, "Hoje vai ter sushi!")
+            elif indice_cenario == 3:
+                alocar_caixa(tela, player.rect, "Falta pouco!!!")
         elif player.rect.x > largura - player.image.get_width() and indice_cenario > 0:
             indice_cenario -= 1
             player.rect.x = 0
@@ -500,6 +511,7 @@ def iniciar_jogo():
             desenhar_rects_colisao(tela, bota_rect, guarda_chuva_rect, bota_visivel, guarda_chuva_visivel, enemy)
         # Update rain
         desenhar_chuva()
+        atualizar_balao(tela, player.rect)
         ultimo_cenario = indice_cenario
         pygame.display.flip()
         clock.tick(fps)
