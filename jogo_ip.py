@@ -235,6 +235,7 @@ def mostrar_creditos():
         tela.fill((0, 0, 0))
         texto = fonte_grande.render("Créditos", True, branco)
         texto_nome = fonte_media.render("Desenvolvido por Pedro (phhs)", True, branco)
+        texto_nome2 = fonte_media.render("Arte por Pedro (phhs) e Eduardo (elso)", True, branco)
         texto_esc = fonte_media.render("Pressione ESC para voltar", True, branco)
         controles = [
             "Controles do Jogo:",
@@ -262,6 +263,7 @@ def mostrar_creditos():
         ]
         tela.blit(texto, (largura // 2 - 150, 50))
         tela.blit(texto_nome, (largura // 2 - 300, 150))
+        tela.blit(texto_nome2, (largura // 2 - 300, 200))
         y_pos = 250
         for linha in controles:
             if linha == "Controles do Jogo:" or linha == "Recursos Adicionados:":
@@ -298,6 +300,10 @@ def iniciar_jogo():
     inventory = Inventory()
     # Cenarios
     caminhos_fundos = ["images/entrada_ufpe.png", "images/bib_central.png", "images/ru.png", "images/CIn.png"]
+    
+    # Tipos de inimigos para cada cenário
+    tipos_inimigos = ["entrada", "biblioteca", "ru", "cin"]
+    
     cenarios = []
     for caminho in caminhos_fundos:
         imagem = pygame.image.load(caminho)
@@ -433,6 +439,8 @@ def iniciar_jogo():
         # Debug print to track transition condition
         if debug_mode:
             print(f"Player x: {player.rect.x}, Scenario: {indice_cenario}")
+            if enemy:
+                print(f"Enemy type: {enemy.enemy_type}, HP: {enemy.hp}/{enemy.max_hp}, Damage: {enemy.damage}")
         # Scenario change logic
         if player.rect.x <= -10 and indice_cenario < len(cenarios) - 1:
             indice_cenario += 1
@@ -450,8 +458,11 @@ def iniciar_jogo():
             print(f"Transitioned to previous scenario: {indice_cenario}")
         # Spawn enemy only after delay, if player moves leftward, and if not defeated in this scenario
         if not enemy and not enemy_defeated_in_scenario[indice_cenario] and current_time - last_spawn_time > spawn_delay and player.rect.x < largura - 100:
-            enemy = Enemy()
+            # Determinar tipo de inimigo baseado no cenário atual
+            tipo_atual = tipos_inimigos[indice_cenario]
+            enemy = Enemy(enemy_type=tipo_atual)
             last_spawn_time = current_time
+            print(f"Inimigo {tipo_atual} spawnado no cenário {indice_cenario}")
         # Move enemy to match player's y-position
         if enemy:
             enemy.move(player.rect.y)
