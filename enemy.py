@@ -23,22 +23,15 @@ class Enemy:
         # Configurações específicas por tipo de inimigo
         if enemy_type == "entrada":
             # Carregar GIF animado para entrada
-            try:
-                gif = Image.open("images/inimigo 1.gif")
-                self.frames = []
-                for frame in range(gif.n_frames):
-                    gif.seek(frame)
-                    frame_surface = pygame.image.fromstring(gif.convert("RGBA").tobytes(), gif.size, "RGBA")
-                    frame_surface = pygame.transform.scale(frame_surface, (largura // 16, largura // 8))
-                    self.frames.append(frame_surface)
-                self.image = self.frames[0]  # Frame inicial
-                print(f"GIF carregado com {len(self.frames)} frames para inimigo entrada")
-            except Exception as e:
-                print(f"Erro ao carregar GIF: {e}")
-                # Fallback para imagem estática
-                self.image = pygame.image.load("images/inimigo 1.gif")
-                self.image = pygame.transform.scale(self.image, (largura // 16, largura // 8))
-                self.frames = []
+            gif = Image.open("images/inimigo 1.gif")
+            self.frames = []
+            for frame in range(gif.n_frames):
+                gif.seek(frame)
+                frame_surface = pygame.image.fromstring(gif.convert("RGBA").tobytes(), gif.size, "RGBA")
+                frame_surface = pygame.transform.scale(frame_surface, (largura // 16, largura // 8))
+                self.frames.append(frame_surface)
+            self.image = self.frames[0]  # Frame inicial
+            print(f"GIF carregado com {len(self.frames)} frames para inimigo entrada")
             
             self.damage = random.randint(3, 15)  # Inimigo mais fraco
             self.hp = 20
@@ -74,27 +67,13 @@ class Enemy:
             
         elif enemy_type == "ru":
             # Carregar GIF animado para RU
-            try:
-                gif = Image.open("images/crocodile.gif")
-                self.frames = []
-                for frame in range(gif.n_frames):
-                    gif.seek(frame)
-                    frame_surface = pygame.image.fromstring(gif.convert("RGBA").tobytes(), gif.size, "RGBA")
-                    frame_surface = pygame.transform.scale(frame_surface, (largura // 16, largura // 8))
-                    self.frames.append(frame_surface)
-                self.image = self.frames[0]  # Frame inicial
-                print(f"GIF carregado com {len(self.frames)} frames para inimigo RU")
-            except Exception as e:
-                print(f"Erro ao carregar GIF do RU: {e}")
-                # Fallback para imagem estática
-                try:
-                    self.image = pygame.image.load("images/crocodile.gif")
-                    self.image = pygame.transform.scale(self.image, (largura // 16, largura // 8))
-                except:
-                    # Se falhar, criar um inimigo padrão colorido
-                    self.image = pygame.Surface((largura // 16, largura // 8))
-                    self.image.fill((0, 0, 255))  # Azul como fallback
-                self.frames = []
+            #try:
+            self.image = pygame.image.load("images/image-removebg-preview.png")
+            self.image = pygame.transform.scale(self.image, (largura // 16, largura // 8))
+            self.damage = random.randint(20, 40)  # Boss final
+            self.hp = 80
+            self.max_hp = 80
+            
             
             self.damage = random.randint(10, 25)  # Inimigo forte
             self.hp = 50

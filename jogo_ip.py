@@ -34,7 +34,7 @@ class Player:
         limite_x_max = largura_tela - self.image.get_width()
         self.rect.clamp_ip(pygame.Rect(limite_x_min, limite_y_min, limite_x_max - limite_x_min, limite_y_max - limite_y_min))
 
-# ============ FUNÇÕES DE DEBUG E MELHORIAS ============
+# ============ FUNÇÕES DE DEBUG ============
 
 def desenhar_rects_debug(tela_surface, player_rect, limites_rect):
     """Desenha retângulos de debug"""
@@ -193,15 +193,16 @@ for _ in range(num_gotas):
     velocidade = random.randint(4, 10)
     chuva.append([x, y, comprimento, velocidade])
 
-def desenhar_chuva():
-    for gota in chuva:
-        x, y, comp, vel = gota
-        pygame.draw.line(tela, (138, 138, 255), (x, y), (x, y + comp), 1)
-        gota[1] += vel
-        if gota[1] > altura:
-            gota[0] = random.randint(0, largura)
-            gota[1] = random.randint(-20, -5)
-            gota[3] = random.randint(4, 10)
+def desenhar_chuva(cond):
+    if cond == True:
+        for gota in chuva:
+            x, y, comp, vel = gota
+            pygame.draw.line(tela, (138, 138, 255), (x, y), (x, y + comp), 1)
+            gota[1] += vel
+            if gota[1] > altura:
+                gota[0] = random.randint(0, largura)
+                gota[1] = random.randint(-20, -5)
+                gota[3] = random.randint(4, 10)
 
 def desenhar_botao(img_buttom, x, y, acao=None):
     mouse = pygame.mouse.get_pos()
@@ -298,15 +299,16 @@ def iniciar_jogo():
     global debug_mode, mostrar_colisoes
     bota_visivel = True
     guarda_chuva_visivel = True
+    flag_cracha = False
     cracha_visivel = True
     ultimo_cenario = 0
     # Initialize inventory
     inventory = Inventory()
     # Cenarios
-    caminhos_fundos = ["images/entrada_ufpe.png", "images/bib_central.png", "images/ru.png", "images/CIn.png"]
+    caminhos_fundos = ["images/entrada_ufpe.png", "images/bib_central.png", "images/ru.png", "images/CIn.png", "images/CIn_ensolarado.png"]
     
     # Tipos de inimigos para cada cenário
-    tipos_inimigos = ["entrada", "biblioteca", "ru", "cin"]
+    tipos_inimigos = ["entrada", "biblioteca", "ru"]
     
     cenarios = []
     for caminho in caminhos_fundos:
@@ -446,6 +448,11 @@ def iniciar_jogo():
             print(f"Player x: {player.rect.x}, Scenario: {indice_cenario}")
             if enemy:
                 print(f"Enemy type: {enemy.enemy_type}, HP: {enemy.hp}/{enemy.max_hp}, Damage: {enemy.damage}")
+
+        if flag_cracha:
+            indice_cenario = 4
+            print("Muda pro cenario 4 agora")
+
         # Scenario change logic
         if player.rect.x <= -10 and indice_cenario < len(cenarios) - 1:
             indice_cenario += 1
@@ -470,15 +477,15 @@ def iniciar_jogo():
         # Spawn enemy only after delay, if player moves leftward, and if not defeated in this scenario
         if not enemy and not enemy_defeated_in_scenario[indice_cenario] and current_time - last_spawn_time > spawn_delay and player.rect.x < largura - 100:
             # Determinar tipo de inimigo baseado no cenário atual
-            tipo_atual = tipos_inimigos[indice_cenario]
-            enemy = Enemy(enemy_type=tipo_atual)
+            if indice_cenario < 3:
+                tipo_atual = tipos_inimigos[indice_cenario]
+                enemy = Enemy(enemy_type=tipo_atual)
             last_spawn_time = current_time
             print(f"Inimigo {tipo_atual} spawnado no cenário {indice_cenario}")
         # Move enemy to match player's y-position
         if enemy:
             enemy.move(player.rect.y)
         # Check for combat trigger
-        combat_triggered = False
         if enemy and current_time - last_spawn_time > spawn_delay and (player.rect.colliderect(enemy.rect) or abs(player.rect.x - enemy.rect.x) < 10):
             combat_system = CombatSystem(player, enemy, inventory, fonte_grande, fonte_media, caminhos_fundos[indice_cenario])
             result = combat_system.run_combat()
@@ -490,17 +497,16 @@ def iniciar_jogo():
             elif result == "Defeat":
                 pygame.quit()
                 sys.exit()
-            combat_triggered = True
         # Draw scenario
         tela.blit(cenarios[indice_cenario], (0, 0))
-        if chao_sprite:
+        if chao_sprite and indice_cenario != 4:
             desenhar_chao(tela, chao_sprite, largura, altura)
         # Draw player and enemy
         tela.blit(player.image, player.rect.topleft)
         if enemy:
             tela.blit(enemy.image, enemy.rect.topleft)
         # Draw collectibles
-        bota_rect, guarda_chuva_rect, bota_visivel, guarda_chuva_visivel, cracha_visivel = coletaveis(indice_cenario, ultimo_cenario, player.rect.x, player.rect.y, player.image, bota_visivel, guarda_chuva_visivel, inventory, cracha_visivel)
+        bota_rect, guarda_chuva_rect, bota_visivel, guarda_chuva_visivel, cracha_visivel, flag_cracha = coletaveis(indice_cenario, ultimo_cenario, player.rect.x, player.rect.y, player.image, bota_visivel, guarda_chuva_visivel, inventory, cracha_visivel, flag_cracha)
         # Draw inventory
         inventory.draw(tela)
         # Debug and collision visuals
@@ -510,7 +516,8 @@ def iniciar_jogo():
         if mostrar_colisoes:
             desenhar_rects_colisao(tela, bota_rect, guarda_chuva_rect, bota_visivel, guarda_chuva_visivel, enemy)
         # Update rain
-        desenhar_chuva()
+        if indice_cenario != 4:
+            desenhar_chuva(True)
         atualizar_balao(tela, player.rect)
         ultimo_cenario = indice_cenario
         pygame.display.flip()
@@ -529,7 +536,7 @@ def menu_principal():
         desenhar_botao(jogar_buttom, largura // 2 - 150, altura // 2 - 100, iniciar_jogo)
         desenhar_botao(creditos_buttom, largura // 2 - 150, altura // 2 + 0, mostrar_creditos)
         desenhar_botao(sair_buttom, largura // 2 - 150, altura // 2 + 100, pygame.quit)
-        desenhar_chuva()
+        desenhar_chuva(True)
         
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
