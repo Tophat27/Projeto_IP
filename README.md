@@ -14,9 +14,9 @@
 <br> - Vinícius S S Brandão<vssb>
 <br> - Gabriel Marins Zarour <gmz>
 <br> - Eduardo Lucas <elso>
-<br> - Pedro Henrique Herculano da Silva<phhs>
-<br> - Pedro Henrique Santana de Morais<phsm2>
-<br> - Gabriel <jgcb>
+<br> - Pedro Henrique Herculano da Silva"<phhs>"
+<br> - Pedro Henrique Santana de Morais"<phsm2>"
+<br> - Gabriel "<jgcb>"
 
   
   
