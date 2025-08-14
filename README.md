@@ -17,7 +17,7 @@
 - Pedro Henrique Herculano da Silva<phhs>
 - Pedro Henrique Santana de Morais<phsm2>
 - Gabriel <jgcb>
-
+* aa
 ---
 
 ## 📖 Sobre o Jogo
