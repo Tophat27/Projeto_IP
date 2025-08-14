@@ -23,26 +23,19 @@ class Enemy:
         # Configurações específicas por tipo de inimigo
         if enemy_type == "entrada":
             # Carregar GIF animado para entrada
-            try:
-                gif = Image.open("images/inimigo 1.gif")
-                self.frames = []
-                for frame in range(gif.n_frames):
-                    gif.seek(frame)
-                    frame_surface = pygame.image.fromstring(gif.convert("RGBA").tobytes(), gif.size, "RGBA")
-                    frame_surface = pygame.transform.scale(frame_surface, (largura // 16, largura // 8))
-                    self.frames.append(frame_surface)
-                self.image = self.frames[0]  # Frame inicial
-                print(f"GIF carregado com {len(self.frames)} frames para inimigo entrada")
-            except Exception as e:
-                print(f"Erro ao carregar GIF: {e}")
-                # Fallback para imagem estática
-                self.image = pygame.image.load("images/inimigo 1.gif")
-                self.image = pygame.transform.scale(self.image, (largura // 16, largura // 8))
-                self.frames = []
+            gif = Image.open("images/inimigo 1.gif")
+            self.frames = []
+            for frame in range(gif.n_frames):
+                gif.seek(frame)
+                frame_surface = pygame.image.fromstring(gif.convert("RGBA").tobytes(), gif.size, "RGBA")
+                frame_surface = pygame.transform.scale(frame_surface, (largura // 16, largura // 8))
+                self.frames.append(frame_surface)
+            self.image = self.frames[0]  # Frame inicial
+            print(f"GIF carregado com {len(self.frames)} frames para inimigo entrada")
             
             self.damage = random.randint(8, 20)  # Inimigo mais fraco
-            self.hp = 30
-            self.max_hp = 30
+            self.hp = 35
+            self.max_hp = 35
             
         elif enemy_type == "biblioteca":
             # Carregar GIF animado para biblioteca
@@ -68,56 +61,28 @@ class Enemy:
                     self.image.fill((0, 255, 0))  # Verde como fallback
                 self.frames = []
             
-            self.damage = random.randint(12, 25)  # Inimigo médio
+            self.damage = random.randint(15, 30)  # Inimigo médio
             self.hp = 45
             self.max_hp = 45
             
         elif enemy_type == "ru":
             # Carregar GIF animado para RU
-            try:
-                gif = Image.open("images/crocodile.gif")
-                self.frames = []
-                for frame in range(gif.n_frames):
-                    gif.seek(frame)
-                    frame_surface = pygame.image.fromstring(gif.convert("RGBA").tobytes(), gif.size, "RGBA")
-                    frame_surface = pygame.transform.scale(frame_surface, (largura // 16, largura // 8))
-                    self.frames.append(frame_surface)
-                self.image = self.frames[0]  # Frame inicial
-                print(f"GIF carregado com {len(self.frames)} frames para inimigo RU")
-            except Exception as e:
-                print(f"Erro ao carregar GIF do RU: {e}")
-                # Fallback para imagem estática
-                try:
-                    self.image = pygame.image.load("images/crocodile.gif")
-                    self.image = pygame.transform.scale(self.image, (largura // 16, largura // 8))
-                except:
-                    # Se falhar, criar um inimigo padrão colorido
-                    self.image = pygame.Surface((largura // 16, largura // 8))
-                    self.image.fill((0, 0, 255))  # Azul como fallback
-                self.frames = []
+            #try:
+            self.image = pygame.image.load("images/image-removebg-preview.png")
+            self.image = pygame.transform.scale(self.image, (largura // 16, largura // 8))
+            self.damage = random.randint(20, 40)  # Boss final
+            self.hp = 80
+            self.max_hp = 80
+            
             
             self.damage = random.randint(15, 30)  # Inimigo forte
             self.hp = 60
             self.max_hp = 60
             
-        elif enemy_type == "cin":
-            self.image = pygame.image.load("images/image-removebg-preview.png")
-            self.image = pygame.transform.scale(self.image, (largura // 16, largura // 8))
-            self.damage = random.randint(20, 35)  # Boss final
-            self.hp = 80
-            self.max_hp = 80
-            
+        
         else:
-            # Fallback para inimigo padrão
-            try:
-                self.image = pygame.image.load("images/enemy.png")
-            except:
-                # Se não encontrar enemy.png, criar um inimigo padrão colorido
-                self.image = pygame.Surface((largura // 16, largura // 8))
-                self.image.fill((255, 0, 0))  # Vermelho como fallback
-            self.damage = random.randint(10, 30)
-            self.hp = 40
-            self.max_hp = 40
+            print()# Fallback para inimigo padrão
+            
             
         self.rect = self.image.get_rect(topleft=(0, 0))
 
