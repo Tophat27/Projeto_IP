@@ -258,21 +258,6 @@ Cada arquivo possui uma responsabilidade específica, seguindo o princípio **Si
 - **`jogo_ip.py`**: Gerenciamento de estados do jogo (menu, jogo, combate)
 - **`combat.py`**: Estados do combate (turno do jogador, turno do inimigo)
 
-#### **Observer Pattern**
-- **Sistema de eventos**: Notificações entre módulos quando necessário
-
-### 📊 **Métricas de Qualidade do Código**
-
-- **Coesão Alta**: Cada arquivo tem responsabilidades bem definidas
-- **Acoplamento Baixo**: Módulos dependem minimamente uns dos outros
-- **Reutilização**: Classes podem ser facilmente reutilizadas
-- **Testabilidade**: Cada módulo pode ser testado isoladamente
-- **Manutenibilidade**: Código organizado e fácil de entender
-
----
-
-## 🎨 Sistema de Inimigos
-
 ### 🐉 **Tipos de Inimigos**
 
 | Cenário | Tipo | HP | Dano | Comportamento | Imagem |
@@ -288,43 +273,11 @@ Cada arquivo possui uma responsabilidade específica, seguindo o princípio **Si
 - **Cenário 2**: Desafio aumentado com inimigos mais fortes
 - **Cenário 3**: Boss final com máxima dificuldade
 
----
-
-## 🎵 Sistema de Áudio
-
-### 🎼 **Músicas**
-- **Menu Principal**: Trilha de abertura
-- **Jogo**: Música ambiente durante exploração
-- **Combate**: Trilha épica para batalhas
-
-### 🔊 **Efeitos Sonoros**
-- **Ataques**: Sons de impacto
-- **Vitória**: Música de celebração
-- **Derrota**: Som de "Game Over"
-
----
-
-## 🎯 Funcionalidades Avançadas
-
 ### 🐛 **Modo Debug**
 - Visualização de retângulos de colisão
 - Informações de posição do jogador
 - Estatísticas dos inimigos
 - Limites de movimento
-
-### 🎭 **Sistema de Animações**
-- **GIFs Animados**: Suporte completo para animações
-- **Frames Dinâmicos**: Transições suaves entre estados
-- **Orientação Inteligente**: Espelhamento automático de sprites
-
-### 🔄 **Sistema de Partículas**
-- **Partículas de Dano**: Feedback visual em tempo real
-- **Animações Fluidas**: Movimento com gravidade
-- **Transparência Dinâmica**: Efeitos de fade out
-
----
-
-## 🌟 Benefícios da Implementação
 
 ### 🎮 **Para Jogadores**
 - **Variedade**: Cada cenário oferece uma experiência única
@@ -332,15 +285,6 @@ Cada arquivo possui uma responsabilidade específica, seguindo o princípio **Si
 - **Imersão**: Inimigos temáticos para cada local
 - **Balanceamento**: Estatísticas apropriadas para cada fase
 - **Feedback Visual**: Sistema de partículas de dano para melhor experiência
-
-### 🛠️ **Para Desenvolvedores**
-- **Arquitetura Modular**: Código bem organizado e fácil de manter
-- **Orientação a Objetos**: Classes reutilizáveis e bem estruturadas
-- **Separação de Responsabilidades**: Cada módulo com função específica
-- **Robustez**: Sistema de fallback para evitar erros
-- **Testabilidade**: Cada módulo pode ser testado isoladamente
-
----
 
 ## 🧪 Testando o Sistema
 
@@ -359,77 +303,6 @@ Cada arquivo possui uma responsabilidade específica, seguindo o princípio **Si
 - [ ] Sistema de combate responsivo
 - [ ] Partículas de dano visíveis
 - [ ] Transições entre cenários suaves
-
----
-
-## 🚧 Personalização
-
-### 🎨 **Adicionando Novos Inimigos**
-1. Adicione o tipo na lista `tipos_inimigos`
-2. Crie a lógica na classe `Enemy`
-3. Adicione estatísticas e comportamentos
-4. Crie a imagem correspondente
-
-### 🎵 **Modificando Áudio**
-1. Substitua arquivos na pasta `SFX/`
-2. Atualize referências em `musica_config.py`
-3. Teste a sincronização
-
-### 🖼️ **Alterando Sprites**
-1. Substitua arquivos na pasta `images/`
-2. Mantenha as dimensões originais
-3. Teste as animações
-
----
-
-## 🤝 Contribuição
-
-### 📝 **Como Contribuir**
-1. Fork o projeto
-2. Crie uma branch para sua feature
-3. Commit suas mudanças
-4. Push para a branch
-5. Abra um Pull Request
-
-### 🐛 **Reportando Bugs**
-- Use o sistema de Issues do GitHub
-- Descreva o problema detalhadamente
-- Inclua passos para reproduzir
-- Adicione screenshots se relevante
-
----
-
-## 📄 Licença
-
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
-
----
-
-## 👨‍💻 Desenvolvedores
-
-- **Equipe de Desenvolvimento**: Projeto IP - UFPE
-- **Linguagem**: Python 3.7+
-- **Framework**: Pygame 2.0+
-- **Versão**: 1.0.0
-
----
-
-## 🎉 Agradecimentos
-
-- **UFPE**: Universidade Federal de Pernambuco
-- **Pygame**: Framework de desenvolvimento de jogos
-- **Comunidade Python**: Suporte e recursos
-- **Testadores**: Feedback valioso durante o desenvolvimento
-
----
-
-## 📞 Suporte
-
-- **Issues**: [GitHub Issues](https://github.com/seu-usuario/Projeto_IP/issues)
-- **Documentação**: [Wiki do Projeto](https://github.com/seu-usuario/Projeto_IP/wiki)
-- **Email**: 
-
----
 
 <div align="center">
 
