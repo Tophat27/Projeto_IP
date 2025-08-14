@@ -1,2 +1,18 @@
-Pillow==11.3.0
+# Game UFPE_Alagada - Dependências
+# Versão mínima recomendada para cada pacote
+
+# Framework principal para desenvolvimento de jogos
 pygame==2.6.1
+
+
+# Processamento de imagens e suporte a GIFs
+Pillow==11.3.0
+
+# Sistema de áudio (incluído com pygame, mas especificado para compatibilidade)
+pygame-mixer>=2.0.0
+
+# Para desenvolvimento (opcional)
+# pytest>=6.0.0
+# black>=21.0.0
+# flake8>=3.8.0
+
