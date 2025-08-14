@@ -451,6 +451,7 @@ def iniciar_jogo():
 
         if flag_cracha:
             indice_cenario = 4
+            alocar_caixa(tela, player.rect, "Pronto para a aula do Mestre Yoda! :D")
             print("Muda pro cenario 4 agora")
 
         # Scenario change logic
@@ -464,9 +465,11 @@ def iniciar_jogo():
             if indice_cenario == 1:
                 alocar_caixa(tela, player.rect, "Era uma vez os livros...")
             elif indice_cenario == 2:
-                alocar_caixa(tela, player.rect, "Hoje vai ter sushi!")
+                alocar_caixa(tela, player.rect, "Hoje vai ter espetinho de gato!")
             elif indice_cenario == 3:
                 alocar_caixa(tela, player.rect, "Falta pouco!!!")
+            elif indice_cenario == 4:
+                alocar_caixa(tela, player.rect, "Estou pronto para a aula do grande Mestre Yoda! :D")
         elif player.rect.x > largura - player.image.get_width() and indice_cenario > 0:
             indice_cenario -= 1
             player.rect.x = 0

@@ -33,14 +33,14 @@ class Enemy:
             self.image = self.frames[0]  # Frame inicial
             print(f"GIF carregado com {len(self.frames)} frames para inimigo entrada")
             
-            self.damage = random.randint(3, 15)  # Inimigo mais fraco
-            self.hp = 20
-            self.max_hp = 20
+            self.damage = random.randint(5, 15)  # Inimigo mais fraco
+            self.hp = 30
+            self.max_hp = 30
             
         elif enemy_type == "biblioteca":
             # Carregar GIF animado para biblioteca
             try:
-                gif = Image.open("images/clippy-microsoft.gif")
+                gif = Image.open("images/crocodile.gif")
                 self.frames = []
                 for frame in range(gif.n_frames):
                     gif.seek(frame)
@@ -61,9 +61,9 @@ class Enemy:
                     self.image.fill((0, 255, 0))  # Verde como fallback
                 self.frames = []
             
-            self.damage = random.randint(7, 20)  # Inimigo médio
-            self.hp = 35
-            self.max_hp = 35
+            self.damage = random.randint(15, 20)  # Inimigo médio
+            self.hp = 40
+            self.max_hp = 40
             
         elif enemy_type == "ru":
             # Carregar GIF animado para RU
@@ -75,7 +75,7 @@ class Enemy:
             self.max_hp = 80
             
             
-            self.damage = random.randint(10, 25)  # Inimigo forte
+            self.damage = random.randint(25, 35)  # Inimigo forte
             self.hp = 50
             self.max_hp = 50
             

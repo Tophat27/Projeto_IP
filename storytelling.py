@@ -5,7 +5,7 @@ from tela import *
 
 pygame.init()
 caixa = pygame.image.load('images/balao_ip.png').convert_alpha()
-caixa = pygame.transform.scale(caixa, (280, 230))
+caixa = pygame.transform.scale(caixa, (380, 230))
 fonte = pygame.font.SysFont('arial', 14, True, False)
 
 mostrar_balao = False
