@@ -10,6 +10,13 @@
 *Um jogo de aventura 2D ambientado na UFPE com sistema de combate por turnos, coleta de itens e progressão por cenários*
 
 </div>
+## 🎓 Equipe
+Vinícius S S Brandão<vssb>
+Gabriel Marins Zarour <gmz>
+Eduardo Lucas <elso>
+Pedro Henrique Herculano da Silva<phhs>
+Pedro Henrique Santana de Morais<phsm2>
+Gabriel <jgcb>
 
 ---
 
