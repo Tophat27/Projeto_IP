@@ -11,12 +11,12 @@
 
 </div>
 ### 🎓 Equipe
-- Vinícius S S Brandão<vssb>
-- Gabriel Marins Zarour <gmz>
-- Eduardo Lucas <elso>
-- Pedro Henrique Herculano da Silva<phhs>
-- Pedro Henrique Santana de Morais<phsm2>
-- Gabriel <jgcb>
+<br> - Vinícius S S Brandão<vssb>
+<br> - Gabriel Marins Zarour <gmz>
+<br> - Eduardo Lucas <elso>
+<br> - Pedro Henrique Herculano da Silva<phhs>
+<br> - Pedro Henrique Santana de Morais<phsm2>
+<br> - Gabriel <jgcb>
 ---
 
 ## 📖 Sobre o Jogo
