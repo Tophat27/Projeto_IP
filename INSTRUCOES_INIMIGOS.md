@@ -7,29 +7,29 @@ O sistema foi implementado para que cada cenário tenha um tipo específico de i
 
 ### 1. **Entrada UFPE** - Tipo: "entrada"
 - **Imagem**: `images/inimigo 1.gif` (GIF animado)
-- **HP**: 30
-- **Dano**: 8-20
+- **HP**: 20
+- **Dano**: 3-15
 - **Comportamento**: Movimento simples + animação GIF
 - **Características**: Ideal para jogadores iniciantes, com animação
 
 ### 2. **Biblioteca Central** - Tipo: "biblioteca"
 - **Imagem**: `images/clippy-microsoft.gif` (GIF animado)
-- **HP**: 45
-- **Dano**: 12-25
+- **HP**: 35
+- **Dano**: 7-20
 - **Comportamento**: Movimento suave com variação sutil + animação GIF
 - **Características**: Inimigo de dificuldade média, com animação
 
 ### 3. **RU** - Tipo: "ru"
 - **Imagem**: `images/crocodile.gif` (GIF animado)
-- **HP**: 60
-- **Dano**: 15-30
+- **HP**: 50
+- **Dano**: 10-25
 - **Comportamento**: Movimento errático e imprevisível + animação GIF
 - **Características**: Inimigo mais desafiador, com animação
 
 ### 4. **CIn** - Tipo: "cin"
 - **Imagem**: `images/image-removebg-preview.png`
-- **HP**: 80
-- **Dano**: 20-35
+- **HP**: 70
+- **Dano**: 15-30
 - **Comportamento**: Movimento agressivo com variação horizontal
 - **Características**: Boss final, inimigo mais forte
 
@@ -47,10 +47,10 @@ Se você não criar as imagens específicas, o sistema usará `images/enemy.png`
 ## Características do Sistema
 
 ### Progressão de Dificuldade
-- **Cenário 0 (Entrada)**: Inimigo mais fraco (30 HP, 8-20 dano)
-- **Cenário 1 (Biblioteca)**: Inimigo médio (45 HP, 12-25 dano)
-- **Cenário 2 (RU)**: Inimigo forte (60 HP, 15-30 dano)
-- **Cenário 3 (CIn)**: Boss final (80 HP, 20-35 dano)
+- **Cenário 0 (Entrada)**: Inimigo mais fraco (20 HP, 3-15 dano)
+- **Cenário 1 (Biblioteca)**: Inimigo médio (35 HP, 7-20 dano)
+- **Cenário 2 (RU)**: Inimigo forte (50 HP, 10-25 dano)
+- **Cenário 3 (CIn)**: Boss final (70 HP, 15-30 dano)
 
 ### Comportamentos Únicos
 - **Entrada**: Movimento simples e previsível
@@ -64,6 +64,19 @@ Se alguma imagem não for encontrada, o sistema:
 2. Se falhar, cria um inimigo vermelho padrão
 3. Mantém as estatísticas apropriadas para o cenário
 
+### Orientação dos Personagens no Combate
+- **Jogador**: Mantém a direção que estava olhando antes do combate
+- **Inimigo**: Sempre olha para a esquerda (em direção ao jogador)
+- **Espelhamento Automático**: GIFs e imagens são automaticamente espelhados conforme necessário
+- **Consistência Visual**: A orientação é mantida durante todo o combate
+
+### Sistema de Exibição de Dano
+- **Partículas Animadas**: Números de dano aparecem como partículas flutuantes
+- **Duração**: Dano é exibido por 1.5 segundos após ser causado
+- **Animação**: Números flutuam para cima com gravidade e transparência
+- **Cores**: Dano do jogador em vermelho vibrante, dano do inimigo em vermelho claro
+- **Posicionamento**: Dano aparece acima do personagem que recebeu o ataque
+
 ## Benefícios da Implementação
 
 1. **Variedade**: Cada cenário oferece uma experiência única
@@ -71,6 +84,8 @@ Se alguma imagem não for encontrada, o sistema:
 3. **Imersão**: Inimigos temáticos para cada local
 4. **Balanceamento**: Estatísticas apropriadas para cada fase
 5. **Robustez**: Sistema de fallback para evitar erros
+6. **Orientação Correta**: Personagens mantêm sua direção durante o combate
+7. **Feedback Visual**: Sistema de partículas de dano para melhor experiência do usuário
 
 ## Testando o Sistema
 

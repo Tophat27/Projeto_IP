@@ -40,9 +40,9 @@ class Enemy:
                 self.image = pygame.transform.scale(self.image, (largura // 16, largura // 8))
                 self.frames = []
             
-            self.damage = random.randint(8, 20)  # Inimigo mais fraco
-            self.hp = 30
-            self.max_hp = 30
+            self.damage = random.randint(3, 15)  # Inimigo mais fraco
+            self.hp = 20
+            self.max_hp = 20
             
         elif enemy_type == "biblioteca":
             # Carregar GIF animado para biblioteca
@@ -68,9 +68,9 @@ class Enemy:
                     self.image.fill((0, 255, 0))  # Verde como fallback
                 self.frames = []
             
-            self.damage = random.randint(12, 25)  # Inimigo médio
-            self.hp = 45
-            self.max_hp = 45
+            self.damage = random.randint(7, 20)  # Inimigo médio
+            self.hp = 35
+            self.max_hp = 35
             
         elif enemy_type == "ru":
             # Carregar GIF animado para RU
@@ -96,16 +96,16 @@ class Enemy:
                     self.image.fill((0, 0, 255))  # Azul como fallback
                 self.frames = []
             
-            self.damage = random.randint(15, 30)  # Inimigo forte
-            self.hp = 60
-            self.max_hp = 60
+            self.damage = random.randint(10, 25)  # Inimigo forte
+            self.hp = 50
+            self.max_hp = 50
             
         elif enemy_type == "cin":
             self.image = pygame.image.load("images/image-removebg-preview.png")
             self.image = pygame.transform.scale(self.image, (largura // 16, largura // 8))
-            self.damage = random.randint(20, 35)  # Boss final
-            self.hp = 80
-            self.max_hp = 80
+            self.damage = random.randint(15, 30)  # Boss final
+            self.hp = 70
+            self.max_hp = 70
             
         else:
             # Fallback para inimigo padrão
@@ -115,7 +115,7 @@ class Enemy:
                 # Se não encontrar enemy.png, criar um inimigo padrão colorido
                 self.image = pygame.Surface((largura // 16, largura // 8))
                 self.image.fill((255, 0, 0))  # Vermelho como fallback
-            self.damage = random.randint(10, 30)
+            self.damage = random.randint(5, 25)
             self.hp = 40
             self.max_hp = 40
             
