@@ -11,7 +11,7 @@
 
 </div>
 ### 🎓 Equipe
-<br> <li> - Vinícius S S Brandão "vssb" </li>
+<br> - Vinícius S S Brandão "vssb"
 <br> - Gabriel Marins Zarour "gmz"
 <br> - Eduardo Lucas "elso"
 <br> - Pedro Henrique Herculano da Silva"phhs"
