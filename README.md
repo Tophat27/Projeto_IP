@@ -286,24 +286,6 @@ Cada arquivo possui uma responsabilidade específica, seguindo o princípio **Si
 - **Balanceamento**: Estatísticas apropriadas para cada fase
 - **Feedback Visual**: Sistema de partículas de dano para melhor experiência
 
-## 🧪 Testando o Sistema
-
-### 🎮 **Como Testar**
-1. Execute o jogo
-2. Ative o modo debug (tecla D)
-3. Navegue pelos cenários
-4. Teste o sistema de combate
-5. Verifique as animações dos inimigos
-6. Teste o sistema de inventário
-
-### 📊 **Verificações Importantes**
-- [ ] Inimigos spawnam corretamente em cada cenário
-- [ ] Estatísticas diferentes por tipo de inimigo
-- [ ] Animações GIF funcionando
-- [ ] Sistema de combate responsivo
-- [ ] Partículas de dano visíveis
-- [ ] Transições entre cenários suaves
-
 <div align="center">
 
 **🎮 Divirta-se jogando Game UFPE_Alagada! 🎮**
