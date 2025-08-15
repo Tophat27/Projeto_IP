@@ -9,7 +9,7 @@ pygame==2.6.1
 Pillow==11.3.0
 
 # Sistema de áudio (incluído com pygame, mas especificado para compatibilidade)
-pygame-mixer>=2.0.0
+#pygame-mixer>=2.0.0
 
 # Para desenvolvimento (opcional)
 # pytest>=6.0.0

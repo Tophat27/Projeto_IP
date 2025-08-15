@@ -10,6 +10,7 @@ from inventory import Inventory
 from PIL import Image
 from musica_config import inicializar_musica_jogo, tocar_musica_jogo, parar_musica_jogo, inicializar_musica_combate, inicializar_som_ataque, inicializar_som_ataque_inimigo, inicializar_som_vitoria
 from storytelling import *
+import time
 # ============ PLAYER CLASS ============
 class Player:
     def __init__(self, image, x, y):
@@ -451,8 +452,14 @@ def iniciar_jogo():
 
         if flag_cracha:
             indice_cenario = 4
-            alocar_caixa(tela, player.rect, "Pronto para a aula do Mestre Yoda! :D")
             print("Muda pro cenario 4 agora")
+
+            alocar_caixa(tela, player.rect, "Pronto para a aula do mestre Yoda!")
+
+            if player.rect.x <= 10:
+                pygame.quit()
+                sys.exit()
+            
 
         # Scenario change logic
         if player.rect.x <= -10 and indice_cenario < len(cenarios) - 1:
@@ -465,11 +472,10 @@ def iniciar_jogo():
             if indice_cenario == 1:
                 alocar_caixa(tela, player.rect, "Era uma vez os livros...")
             elif indice_cenario == 2:
-                alocar_caixa(tela, player.rect, "Hoje vai ter espetinho de gato!")
+                alocar_caixa(tela, player.rect, "Hoje vai ter sushi!")
             elif indice_cenario == 3:
                 alocar_caixa(tela, player.rect, "Falta pouco!!!")
-            elif indice_cenario == 4:
-                alocar_caixa(tela, player.rect, "Estou pronto para a aula do grande Mestre Yoda! :D")
+                
         elif player.rect.x > largura - player.image.get_width() and indice_cenario > 0:
             indice_cenario -= 1
             player.rect.x = 0
@@ -521,6 +527,16 @@ def iniciar_jogo():
         # Update rain
         if indice_cenario != 4:
             desenhar_chuva(True)
+        
+#        if indice_cenario ==4:
+#  #            # Tempo atual
+#             tempo_atual = pygame.time.get_ticks()
+
+#             # Verifica se passaram 10 segundos (10000 ms)
+#             if tempo_atual - tempo_inicial >= 10000:
+#                 pygame.quit()
+#                 sys.exit()
+
         atualizar_balao(tela, player.rect)
         ultimo_cenario = indice_cenario
         pygame.display.flip()

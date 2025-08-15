@@ -5,8 +5,8 @@ from tela import *
 
 pygame.init()
 caixa = pygame.image.load('images/balao_ip.png').convert_alpha()
-caixa = pygame.transform.scale(caixa, (380, 230))
-fonte = pygame.font.SysFont('arial', 14, True, False)
+caixa = pygame.transform.scale(caixa, (580, 230))
+fonte = pygame.font.SysFont('arial', 17, True, False)
 
 mostrar_balao = False
 balao_inicio_tempo = 0
